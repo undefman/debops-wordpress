@@ -1,0 +1,4 @@
+[debops_all_hosts]
+google.com
+[wordpress]
+google.com
