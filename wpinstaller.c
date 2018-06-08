@@ -128,6 +128,7 @@ int main( int argc, char *argv[] ) {
       getinfo("server", argv[1], "", NULL, ""); //getinfo(char *type, char *domain, char *ip, char *uname, char *passwd)
 
 
+      // taoj file hosts
    	char *hosts_file = "./inventory/hosts";
    	printf("Processing... #1\n");
    	remove(hosts_file);
@@ -136,14 +137,29 @@ int main( int argc, char *argv[] ) {
    	sprintf(hosts_data, "[debops_all_hosts]\n%s\n[wordpress]\n%s\n", argv[1], argv[1]);
    	printf("%s", hosts_data);
 
-   	FILE *opening = fopen(hosts_file, "w");
+   	FILE *opening;
+      opening = fopen(hosts_file, "w");
    	fprintf(opening, "%s", hosts_data);
    	fclose(opening);
+
+
+      // chep file vars.yml
+      sprintf(cmd, "mkdir -p ./inventory/host_vars/%s/", argv[1]);
+      runcmd(cmd);
+      sprintf(cmd, "cp ./inventory/host_vars/example.com/vars.yml ./inventory/host_vars/%s/", argv[1]);
+      runcmd(cmd);
+
+
+
 
       //printf("EXIT_FAILURE: %i\n", EXIT_FAILURE);
 
       //debops bootstrap -u root
-      runcmd("debops bootstrap -u root");
+      if (argv[3] != NULL && strcmp(argv[3], "true") == 0) {
+         printf("%s\n", "[Debug mode]");
+      } else {
+         runcmd("debops bootstrap -u root");
+      }
 
    	exit(0);
 
@@ -176,7 +192,11 @@ int main( int argc, char *argv[] ) {
 
 
       //debops
-      runcmd("debops");
+      if (argv[3] != NULL && strcmp(argv[3], "true") == 0) {
+         printf("%s\n", "[Debug mode]");
+      } else {
+         runcmd("debops");
+      }
 
       exit(0);
 
@@ -190,13 +210,17 @@ int main( int argc, char *argv[] ) {
    	printf("Processing... #3\n");
 
       //debops wordpress
-      runcmd("debops wordpress");
+      if (argv[3] != NULL && strcmp(argv[3], "true") == 0) {
+         printf("%s\n", "[Debug mode]");
+      } else {
+         runcmd("debops wordpress");
+      }
 
 
       char wp_passwod_path[256]; sprintf(wp_passwod_path, "./secret/wordpress/%s/credentials/admin/password", argv[1]);
       char * wp_passwod = read_first_line(wp_passwod_path); //printf("wp_passwod: %s\n", wp_passwod);
       getinfo("wordpress", argv[1], "", "admin", wp_passwod); //getinfo(char *type, char *domain, char *ip, char *uname, char *passwd)
-      
+
       char db_passwd_path[256]; sprintf(db_passwd_path, "./secret/mariadb/%s/credentials/wordpress/password", argv[1]);
       char * db_passwd = read_first_line(db_passwd_path); //printf("db_passwd: %s\n", db_passwd);
       getinfo("database", argv[1], "", "wordpress", db_passwd); //getinfo(char *type, char *domain, char *ip, char *uname, char *passwd)
