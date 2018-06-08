@@ -1,0 +1,39 @@
+wordpress__varnish__add_ban_lurker_headers: True
+wordpress__varnish__purge_conditions:
+  'req.http.X-Purge-Method ~ "(?i)regex"': |
+    ban("obj.http.X-Url ~ " + req.url + " && obj.http.X-Host == " + req.http.host);
+    return (synth(200, "Purged"));
+
+
+
+wordpress__varnish__vcl_recv_conditions:
+  'req.url ~ "^/(cart|my-account|checkout|addons)" || req.url ~ "\?add-to-cart="': 'return (pass);'
+
+
+
+
+wordpress__ssl: True
+wordpress__ssl_provider: 'letsencrypt' # Default, not necessary.
+#wordpress__ssl_crt: '/etc/ssl/cloudflare/server.crt'
+#wordpress__ssl_key: '/etc/ssl/cloudflare/server.key'
+
+
+
+wordpress__plugins:
+  - name: 'woocommerce'
+  - name: 'woocommerce-gateway-paypal-express-checkout'
+  - name: 'woocommerce-services'
+  - name: 'woocommerce-gateway-stripe'
+  - name: 'tiny-compress-images'
+  - name: 'contact-form-7'
+  - name: 'jetpack'
+  - name: 'mailchimp-for-woocommerce'
+  - name: 'redis-cache'
+  - name: 'varnish-http-purge'
+  - name: 'woo-variation-swatches'
+  - name: 'woosidebars'
+  - name: 'yith-woocommerce-wishlist'
+  - name: 'cloudflare'
+  - name: 'nextend-facebook-connect'
+
+
