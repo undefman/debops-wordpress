@@ -192,17 +192,15 @@ int main( int argc, char *argv[] ) {
       //debops wordpress
       runcmd("debops wordpress");
 
-      char wp_passwod_path[256];
-      char db_passwd_path[256];
-      sprintf(wp_passwod_path, "./secret/wordpress/%s/credentials/admin/password", argv[1]);
-      sprintf(db_passwd_path, "./secret/mariadb/%s/credentials/wordpress/password", argv[1]);
 
-
+      char wp_passwod_path[256]; sprintf(wp_passwod_path, "./secret/wordpress/%s/credentials/admin/password", argv[1]);
       char * wp_passwod = read_first_line(wp_passwod_path); //printf("wp_passwod: %s\n", wp_passwod);
-      char * db_passwd = read_first_line(db_passwd_path); //printf("db_passwd: %s\n", db_passwd);
-
       getinfo("wordpress", argv[1], "", "admin", wp_passwod); //getinfo(char *type, char *domain, char *ip, char *uname, char *passwd)
+      
+      char db_passwd_path[256]; sprintf(db_passwd_path, "./secret/mariadb/%s/credentials/wordpress/password", argv[1]);
+      char * db_passwd = read_first_line(db_passwd_path); //printf("db_passwd: %s\n", db_passwd);
       getinfo("database", argv[1], "", "wordpress", db_passwd); //getinfo(char *type, char *domain, char *ip, char *uname, char *passwd)
+
 
       exit(0);
 
