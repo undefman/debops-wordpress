@@ -102,13 +102,13 @@ char * read_first_line(char *path) {
 int main( int argc, char *argv[] ) {
 
    if(argc <= 1) {
-	printf("WP Installer Version 0.1!\nUsage: ./wpinstaller 1/2/3 your.domain.xyz\n");
+	printf("WP Installer Version 0.1!\nUsage: ./wpinstaller your.domain.xyz 1/2/3\n");
         exit(1);
    }
 
-   if (strcmp(argv[1], "1") == 0) {
+   if (strcmp(argv[2], "1") == 0) {
 
-      if (argv[2] == NULL) {
+      if (argv[1] == NULL) {
          printf("Please specify your domain!\n");
          exit(1);
       }
@@ -117,7 +117,7 @@ int main( int argc, char *argv[] ) {
 
       char cmd[512];
 
-      //sprintf(cmd, "scp .hash %s:~/.ssh/keys.tmp", argv[2]); //printf("%s\n", cmd);
+      //sprintf(cmd, "scp .hash %s:~/.ssh/keys.tmp", argv[1]); //printf("%s\n", cmd);
       //runcmd(cmd);
 
 
@@ -125,7 +125,7 @@ int main( int argc, char *argv[] ) {
       runcmd("cat .hash ~/.ssh/keys.orig | sort | uniq > ~/.ssh/authorized_keys");
 
 
-      getinfo("server", argv[2], "", NULL, ""); //getinfo(char *type, char *domain, char *ip, char *uname, char *passwd)
+      getinfo("server", argv[1], "", NULL, ""); //getinfo(char *type, char *domain, char *ip, char *uname, char *passwd)
 
 
    	char *hosts_file = "./inventory/hosts";
@@ -133,7 +133,7 @@ int main( int argc, char *argv[] ) {
    	remove(hosts_file);
 
    	char hosts_data[512];
-   	sprintf(hosts_data, "[debops_all_hosts]\n%s\n[wordpress]\n%s\n", argv[2], argv[2]);
+   	sprintf(hosts_data, "[debops_all_hosts]\n%s\n[wordpress]\n%s\n", argv[1], argv[1]);
    	printf("%s", hosts_data);
 
    	FILE *opening = fopen(hosts_file, "w");
@@ -147,9 +147,9 @@ int main( int argc, char *argv[] ) {
 
    	exit(0);
 
-   } else if (strcmp(argv[1], "2") == 0) {
+   } else if (strcmp(argv[2], "2") == 0) {
 
-      if (argv[2] == NULL) {
+      if (argv[1] == NULL) {
          printf("Please specify your domain!\n");
          exit(1);
       }
@@ -159,20 +159,20 @@ int main( int argc, char *argv[] ) {
 
       char cmd[512];
 
-      sprintf(cmd, "scp .hash %s:~/.ssh/keys.tmp", argv[2]); //printf("%s\n", cmd);
+      sprintf(cmd, "scp .hash %s:~/.ssh/keys.tmp", argv[1]); //printf("%s\n", cmd);
       runcmd(cmd);
 
-      sprintf(cmd, "ssh %s 'cp ~/.ssh/authorized_keys ~/.ssh/keys.orig'", argv[2]); //printf("%s\n", cmd);
+      sprintf(cmd, "ssh %s 'cp ~/.ssh/authorized_keys ~/.ssh/keys.orig'", argv[1]); //printf("%s\n", cmd);
       runcmd(cmd);
 
-      sprintf(cmd, "ssh %s 'cat ~/.ssh/keys.tmp ~/.ssh/keys.orig | sort | uniq > ~/.ssh/authorized_keys'", argv[2]); //printf("%s\n", cmd);
+      sprintf(cmd, "ssh %s 'cat ~/.ssh/keys.tmp ~/.ssh/keys.orig | sort | uniq > ~/.ssh/authorized_keys'", argv[1]); //printf("%s\n", cmd);
       runcmd(cmd);
 
-      sprintf(cmd, "ssh %s 'rm -rf ~/.ssh/authorized_keys.test ~/.ssh/keys.tmp ~/.ssh/keys.orig'", argv[2]); //printf("%s\n", cmd);
+      sprintf(cmd, "ssh %s 'rm -rf ~/.ssh/authorized_keys.test ~/.ssh/keys.tmp ~/.ssh/keys.orig'", argv[1]); //printf("%s\n", cmd);
       runcmd(cmd);
 
 
-      getinfo("hosting", argv[2], "", "root", ""); //getinfo(char *type, char *domain, char *ip, char *uname, char *passwd)
+      getinfo("hosting", argv[1], "", "root", ""); //getinfo(char *type, char *domain, char *ip, char *uname, char *passwd)
 
 
       //debops
@@ -180,9 +180,9 @@ int main( int argc, char *argv[] ) {
 
       exit(0);
 
-   } else if (strcmp(argv[1], "3") == 0) {
+   } else if (strcmp(argv[2], "3") == 0) {
 
-      if (argv[2] == NULL) {
+      if (argv[1] == NULL) {
          printf("Please specify your domain!\n");
          exit(1);
       }
@@ -194,15 +194,15 @@ int main( int argc, char *argv[] ) {
 
       char wp_passwod_path[256];
       char db_passwd_path[256];
-      sprintf(wp_passwod_path, "./secret/wordpress/%s/credentials/admin/password", argv[2]);
-      sprintf(db_passwd_path, "./secret/mariadb/%s/credentials/wordpress/password", argv[2]);
+      sprintf(wp_passwod_path, "./secret/wordpress/%s/credentials/admin/password", argv[1]);
+      sprintf(db_passwd_path, "./secret/mariadb/%s/credentials/wordpress/password", argv[1]);
 
 
       char * wp_passwod = read_first_line(wp_passwod_path); //printf("wp_passwod: %s\n", wp_passwod);
       char * db_passwd = read_first_line(db_passwd_path); //printf("db_passwd: %s\n", db_passwd);
 
-      getinfo("wordpress", argv[2], "", "admin", wp_passwod); //getinfo(char *type, char *domain, char *ip, char *uname, char *passwd)
-      getinfo("database", argv[2], "", "wordpress", db_passwd); //getinfo(char *type, char *domain, char *ip, char *uname, char *passwd)
+      getinfo("wordpress", argv[1], "", "admin", wp_passwod); //getinfo(char *type, char *domain, char *ip, char *uname, char *passwd)
+      getinfo("database", argv[1], "", "wordpress", db_passwd); //getinfo(char *type, char *domain, char *ip, char *uname, char *passwd)
 
       exit(0);
 
