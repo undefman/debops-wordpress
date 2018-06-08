@@ -140,7 +140,7 @@ int main( int argc, char *argv[] )
       //printf("EXIT_FAILURE: %i\n", EXIT_FAILURE);
 
       //debops bootstrap -u root
-      runcmd("debops bootstrap -u root");
+      //runcmd("debops bootstrap -u root");
 
    	exit(0);
 
@@ -169,8 +169,11 @@ int main( int argc, char *argv[] )
       runcmd(cmd);
 
 
+      getinfo("hosting", argv[2], "", "root", ""); //getinfo(char *type, char *domain, char *ip, char *uname, char *passwd)
+
+
       //debops
-      runcmd("debops");
+      //runcmd("debops");
 
       exit(0);
 
@@ -184,7 +187,7 @@ int main( int argc, char *argv[] )
    	printf("Processing... #3\n");
 
       //debops wordpress
-      runcmd("debops wordpress");
+      //runcmd("debops wordpress");
       
       char wp_passwod_path[256];
       char db_passwd_path[256];
