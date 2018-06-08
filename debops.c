@@ -99,8 +99,12 @@ char * read_first_line(char *path) {
    return result;
 }
 
-int main( int argc, char *argv[] )
-{
+int main( int argc, char *argv[] ) {
+
+   if(argc <= 1) {
+	printf("WP Installer Version 0.1!\nUsage: ./wpinstaller 1/2/3 your.domain.xyz\n");
+        exit(1);
+   }
 
    if (strcmp(argv[1], "1") == 0) {
 
@@ -112,11 +116,11 @@ int main( int argc, char *argv[] )
 
 
       char cmd[512];
-      
+
       //sprintf(cmd, "scp .hash %s:~/.ssh/keys.tmp", argv[2]); //printf("%s\n", cmd);
       //runcmd(cmd);
 
-      
+
       runcmd("cp ~/.ssh/authorized_keys ~/.ssh/keys.orig");
       runcmd("cat .hash ~/.ssh/keys.orig | sort | uniq > ~/.ssh/authorized_keys");
 
@@ -127,7 +131,6 @@ int main( int argc, char *argv[] )
    	char *hosts_file = "./inventory/hosts";
    	printf("Processing... #1\n");
    	remove(hosts_file);
-   	
 
    	char hosts_data[512];
    	sprintf(hosts_data, "[debops_all_hosts]\n%s\n[wordpress]\n%s\n", argv[2], argv[2]);
@@ -145,7 +148,7 @@ int main( int argc, char *argv[] )
    	exit(0);
 
    } else if (strcmp(argv[1], "2") == 0) {
-   	
+
       if (argv[2] == NULL) {
          printf("Please specify your domain!\n");
          exit(1);
@@ -155,7 +158,7 @@ int main( int argc, char *argv[] )
 
 
       char cmd[512];
-      
+
       sprintf(cmd, "scp .hash %s:~/.ssh/keys.tmp", argv[2]); //printf("%s\n", cmd);
       runcmd(cmd);
 
@@ -188,13 +191,13 @@ int main( int argc, char *argv[] )
 
       //debops wordpress
       //runcmd("debops wordpress");
-      
+
       char wp_passwod_path[256];
       char db_passwd_path[256];
       sprintf(wp_passwod_path, "./secret/wordpress/%s/credentials/admin/password", argv[2]);
       sprintf(db_passwd_path, "./secret/mariadb/%s/credentials/wordpress/password", argv[2]);
 
-      
+
       char * wp_passwod = read_first_line(wp_passwod_path); //printf("wp_passwod: %s\n", wp_passwod);
       char * db_passwd = read_first_line(db_passwd_path); //printf("db_passwd: %s\n", db_passwd);
 
