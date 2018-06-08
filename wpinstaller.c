@@ -102,7 +102,7 @@ char * read_first_line(char *path) {
 int main( int argc, char *argv[] ) {
 
    if(argc <= 1) {
-	printf("WP Installer Version 0.1!\nUsage: ./wpinstaller your.domain.xyz 1/2/3\n");
+	printf("WP Installer v0.06!\nUsage: ./wpinstaller your.domain.xyz 1/2/3\n");
         exit(1);
    }
 
