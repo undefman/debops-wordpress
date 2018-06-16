@@ -35,5 +35,8 @@ wordpress__plugins:
   - name: 'yith-woocommerce-wishlist'
   - name: 'cloudflare'
   - name: 'nextend-facebook-connect'
-
-
+  - name: 'a3-lazy-load'
+  - name: 'akismet'
+  - name: 'autoptimize'
+  - name: 'flexible-shipping'
+  - name: 'wp-mail-smtp'
