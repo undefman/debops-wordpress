@@ -59,7 +59,7 @@ Nếu ssh ko được (do nó hỏi password) thì nhấn control + C vài lần
 
 Gõ lệnh cài chương trình cần thiết (chỉ cần làm 1 lần đầu.)
 
-apt install git screen unzip libsasl2-dev python-dev libldap2-dev libssl-dev python-pip
+apt install git screen unzip libsasl2-dev python-dev libldap2-dev libssl-dev python-pip build-essential python-setuptools python3-setuptools
 
 pip install --upgrade pip
 
