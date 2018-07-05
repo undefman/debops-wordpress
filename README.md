@@ -90,13 +90,6 @@ Chuyển vào thư mục vừa được giải nén.
 cd yourdomain.com
 
 
-Gõ tiếp:
-
-git reset –hard && git fetch && git pull
-
-
-
-
 Gõ lệnh:
 ./wpinstaller yourdomain.com 1
 
